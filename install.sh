@@ -1,27 +1,62 @@
 #!/usr/bin/env bash
 #
 
+sudo pacman -Sy vim --noconfirm
+
+configeditask() {
+echo ""
+echo "[ONLY DO THIS IF YOU KNOW WHAT YOU ARE DOING!!]"
+echo ""
+read -p "Do you want to edit the configuration file? (y/n): " confedti
+
+case $confedti in
+	'y')
+	vim /root/StormOS/install.sh
+	sleep 5
+	echo ''
+	echo 'Saved to install drive /mnt/home/$USER/Documents/InstallConfig'
+	echo ''
+	clear
+	sh /root/StormOS/install.sh
+	;;
+	*);;
+esac
+}
+
+
 aliases() {
-# Drive to install to.
+# Disk setup
 echo ""
 lsblk
 echo ""
+# Comment this out and uncomment DRIVE if you want to set the configuration manually
 read -p "Please specify which drive it should be installed on [/dev/sda]: " DRIVE
+#DRIVE='/dev/sda'
 
 # Hostname of the installed machine.
+# Comment this out and uncomment HOSTNAME if you want to set the configuration manually
 read -p "Please input your Hostname: " HOSTNAME
+#HOSTNAME='stormos'
 
 # Root password (leave blank to be prompted).
+# Comment this out and uncomment ROOTPASS if you want to set the configuration manually
 read -p "Please input an Password for root: " ROOTPASS
+#ROOTPASS='dt'
 
 # Main user to create (by default, added to wheel group, and others).
+# Comment this out and uncomment USER if you want to set the configuration manually
 read -p "Please input a username for user: " USER
+#USER='namumi'
 
-# The main user's password (leave blank to be prompted).
+# The main user's password.
+# Comment this out and uncomment USERPASS if you want to set the configuration manually
 read -p "Please input an Password for user: " USERPASS
+#USERPASS='dt'
 
 # System timezone.
+# Comment this out and uncomment TIMEZONE if you want to set the configuration manually
 read -p "Please input your region [Europe/Amsterdam]: " TIMEZONE
+#TIMEZONE='Europe/Amsterdam'
 
 echo
 echo ====================
@@ -30,7 +65,7 @@ echo What Desktop do you want to use?
 echo
 echo 1, XFCE Desktop
 echo
-echo 2, Hyprland WindowManager
+echo 2, XFCE-i3 Desktop
 echo
 echo 3, Dwm WindowManager
 echo
@@ -68,7 +103,7 @@ setup_disk() {
 
 setup_packages() {
 	# Actual pacstrap install
-	pacstrap -K /mnt base base-devel linux linux-firmware grub git kitty zsh btop sudo openssh networkmanager cryptsetup lvm2 vim nano neovim
+	pacstrap -K /mnt base base-devel plymouth linux linux-firmware linux-headers grub git kitty zsh btop sudo openssh networkmanager cryptsetup lvm2 vim nano neovim ttf-jetbrains-mono ttf-jetbrains-mono-nerd
 	# Chaotic-AUR Install
 	cat > /mnt/chaoticaur.sh <<EOF
 pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
@@ -84,8 +119,8 @@ choose_desktop() {
 case $DESKTOP in
     '1')
 	pacman -Sy git glibc --noconfirm
-	arch-chroot /mnt pacman -Syu zenity pavucontrol xorg-xrandr xterm pulseaudio xfce4-pulseaudio-plugin firefox yay xfce4 xfce4-goodies plank kwin systemsettings kde-gtk-config neofetch lightdm-gtk-greeter lightdm colloid-gtk-theme-git surfn-icons-git --noconfirm
-
+	arch-chroot /mnt pacman -Syu zenity update-grub pavucontrol xorg-xrandr xterm pulseaudio xfce4-pulseaudio-plugin firefox yay xfce4 xfce4-goodies plank kwin systemsettings kde-gtk-config neofetch lightdm-gtk-greeter lightdm colloid-gtk-theme-git surfn-icons-git mpd mpv mpc ncmpcpp pulsemixer --noconfirm
+mpd-discord-rpc.pkg.tar.zst
 	## services
 	arch-chroot /mnt systemctl enable lightdm
 
@@ -93,6 +128,7 @@ case $DESKTOP in
 	mv -f /root/StormOS/xfce/home/.config /mnt/home/$USER/
 	mv -f /root/StormOS/xfce/home/.local/* /mnt/home/$USER/.local/
 	mv -f /root/StormOS/xfce/home/Desktop /mnt/home/$USER/
+	mv -f /root/StormOS/xfce/home/Music /mnt/home/$USER/
 	mv -f /root/StormOS/xfce/usr/local/bin/* /mnt/usr/local/bin/
 	mv -f /root/StormOS/xfce/usr/local/share/* /mnt/usr/local/share/
 	mv -f /root/StormOS/xfce/usr/share/themes/* /mnt/usr/share/themes/
@@ -100,13 +136,57 @@ case $DESKTOP in
 	mv -f /root/StormOS/xfce/usr/share/backgrounds/* /mnt/usr/share/backgrounds/
 	mv -f /root/StormOS/xfce/usr/share/applications/* /mnt/usr/share/applications/
 	mv -f /root/StormOS/xfce/usr/bin/* /mnt/usr/bin/
+	mv -f /root/StormOS/xfce/home/.mozilla /mnt/home/$USER/
 	cp -f /root/StormOS/xfce/etc/environment /mnt/etc/
 	cp -f /root/StormOS/xfce/etc/lightdm/* /mnt/etc/lightdm/
+	cp -f /root/StormOS/binaries/mpd-discord-rpc.pkg.tar.zst /mnt/
 
 	arch-chroot /mnt chown -R $USER:$USER /home/$USER
-	arch-chroot /mnt chmod +x /usr/bin/*
+	arch-chroot /mnt chmod +x /usr/bin/playmovie
+	arch-chroot /mnt chmod +x /usr/bin/axelc8
+	arch-chroot /mnt chmod +x /usr/bin/wgetm
+	arch-chroot /mnt chmod +x /usr/bin/menuxstorm
+
+	arch-chroot /mnt pacman -U mpd-discord-rpc.pkg.tar.zst --noconfirm
 	;;
-    '2');;
+    '2')
+	pacman -Sy git glibc --noconfirm
+	arch-chroot /mnt pacman -Syu nitrogen picom ocs-url gnome-tweaks meson libconfig ninja asciidoc uthash libxdg-basedir i3 zenity update-grub pavucontrol xorg-xrandr xterm pulseaudio xfce4-pulseaudio-plugin firefox yay xfce4 xfce4-goodies kde-gtk-config neofetch lightdm-gtk-greeter lightdm colloid-gtk-theme-git surfn-icons-git mpd mpv mpc ncmpcpp pulsemixer xfce4-dev-tools --noconfirm
+mpd-discord-rpc.pkg.tar.zst
+	## services
+	arch-chroot /mnt systemctl enable lightdm
+
+	## Config files
+	mv -f /root/StormOS/xfce-i3/home/.config /mnt/home/$USER/
+	mv -f /root/StormOS/xfce-i3/home/.local/* /mnt/home/$USER/.local/
+	mv -f /root/StormOS/xfce-i3/home/Desktop /mnt/home/$USER/
+	mv -f /root/StormOS/xfce-i3/home/Music /mnt/home/$USER/
+	mv -f /root/StormOS/xfce-i3/usr/local/bin/* /mnt/usr/local/bin/
+	mv -f /root/StormOS/xfce-i3/usr/local/share/* /mnt/usr/local/share/
+	mv -f /root/StormOS/xfce-i3/usr/share/themes/* /mnt/usr/share/themes/
+	mv -f /root/StormOS/xfce-i3/usr/share/pixmaps/* /mnt/usr/share/pixmaps/
+	mv -f /root/StormOS/xfce-i3/usr/share/backgrounds/* /mnt/usr/share/backgrounds/
+	mv -f /root/StormOS/xfce-i3/usr/share/applications/* /mnt/usr/share/applications/
+	mv -f /root/StormOS/xfce-i3/usr/bin/* /mnt/usr/bin/
+	mv -f /root/StormOS/xfce-i3/home/.mozilla /mnt/home/$USER/
+	mv -f /root/StormOS/xfce-i3/home/.icons /mnt/home/$USER/
+	cp -f /root/StormOS/xfce-i3/etc/environment /mnt/etc/
+	cp -f /root/StormOS/xfce-i3/etc/lightdm/* /mnt/etc/lightdm/
+	cp -f /root/StormOS/binaries/mpd-discord-rpc.pkg.tar.zst /mnt/
+	cp -f /root/StormOS/binaries/i3ipc-glib-git-r183.1634568402.ef6d030-1-x86_64.pkg.tar.zst /mnt/
+	cp -f /root/StormOS/binaries/xfce4-i3-workspaces-plugin-git-1.4.2.r0.g427f165-1-x86_64.pkg.tar.zst /mnt/
+
+	arch-chroot /mnt chown -R $USER:$USER /home/$USER
+	arch-chroot /mnt chmod +x /usr/bin/playmovie
+	arch-chroot /mnt chmod +x /usr/bin/axelc8
+	arch-chroot /mnt chmod +x /usr/bin/wgetm
+	arch-chroot /mnt chmod +x /usr/bin/menuxstorm
+
+	arch-chroot /mnt pacman -U mpd-discord-rpc.pkg.tar.zst --noconfirm
+	arch-chroot /mnt pacman -U i3ipc-glib-git-r183.1634568402.ef6d030-1-x86_64.pkg.tar.zst --noconfirm
+	arch-chroot /mnt pacman -U xfce4-i3-workspaces-plugin-git-1.4.2.r0.g427f165-1-x86_64.pkg.tar.zst --noconfirm
+	arch-chroot /mnt pacman -R xfdesktop --noconfirm
+	;;
     '3');;
     '0');;
     *);;
@@ -339,7 +419,14 @@ EOF
     chmod 440 /etc/sudoers
 }
 
+setup_plymouth() {
+	mkdir -p /mnt/usr/share/plymouth/themes/natural-gentoo-remastered/
+	cp /root/StormOS/natural-gentoo-remastered/natural-gentoo-remastered.plymouth /mnt/usr/share/plymouth/themes/natural-gentoo-remastered/
+}
+
+
 setup_grub() {
+	genfstab -U /mnt >> /mnt/etc/fstab
     	arch-chroot /mnt grub-install $DRIVE
     	cp -rf /root/StormOS/grub/* /mnt/boot/grub/themes/
 	cp -rf /root/StormOS/default/* /mnt/etc/default/
@@ -350,11 +437,33 @@ finishing_up() {
  	rm /mnt/chrootscript.sh
  	rm /mnt/chaoticaur.sh
 	cd
-	umount -R /mnt
-	reboot
+	read -p "Do you want REBOOT or Check? [y/n] " reck
+	case $confedti in
+		'y')
+		mkdir -p /mnt/home/$USER/Documents/InstallConfig
+		cp /root/StormOS/install.sh /mnt/home/$USER/Documents/InstallConfig/
+		;;
+		*)
+		;;
+	esac
+
+
+	case $reck in
+		'y')
+		umount -R /mnt
+	 	reboot
+		;;
+		'n')
+		bash
+		exit
+		;;
+		*);;
+	esac
 }
 
 configure() {
+configeditask
+
 aliases
 
 echo "setting up disk"
@@ -370,6 +479,8 @@ echo "Setting up chroot"
 chrootscript
 
 choose_desktop
+
+setup_plymouth
 
 echo "setting up grub"
 setup_grub

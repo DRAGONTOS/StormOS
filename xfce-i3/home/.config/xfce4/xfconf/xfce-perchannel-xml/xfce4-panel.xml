@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<channel name="xfce4-panel" version="1.0">
+  <property name="configver" type="int" value="2"/>
+  <property name="panels" type="array">
+    <value type="int" value="1"/>
+    <property name="dark-mode" type="bool" value="true"/>
+    <property name="panel-1" type="empty">
+      <property name="position" type="string" value="p=6;x=683;y=16"/>
+      <property name="length" type="uint" value="100"/>
+      <property name="position-locked" type="bool" value="true"/>
+      <property name="icon-size" type="uint" value="0"/>
+      <property name="size" type="uint" value="30"/>
+      <property name="plugin-ids" type="array">
+        <value type="int" value="1"/>
+        <value type="int" value="11"/>
+        <value type="int" value="3"/>
+        <value type="int" value="17"/>
+        <value type="int" value="2"/>
+        <value type="int" value="5"/>
+        <value type="int" value="4"/>
+        <value type="int" value="20"/>
+        <value type="int" value="13"/>
+        <value type="int" value="18"/>
+        <value type="int" value="8"/>
+        <value type="int" value="19"/>
+        <value type="int" value="9"/>
+        <value type="int" value="16"/>
+        <value type="int" value="12"/>
+        <value type="int" value="15"/>
+        <value type="int" value="6"/>
+      </property>
+      <property name="enter-opacity" type="uint" value="75"/>
+      <property name="leave-opacity" type="uint" value="75"/>
+    </property>
+  </property>
+  <property name="plugins" type="empty">
+    <property name="plugin-2" type="string" value="tasklist">
+      <property name="grouping" type="uint" value="1"/>
+      <property name="show-labels" type="bool" value="true"/>
+      <property name="show-handle" type="bool" value="false"/>
+    </property>
+    <property name="plugin-5" type="string" value="separator">
+      <property name="style" type="uint" value="0"/>
+      <property name="expand" type="bool" value="true"/>
+    </property>
+    <property name="plugin-6" type="string" value="systray">
+      <property name="square-icons" type="bool" value="true"/>
+      <property name="known-legacy-items" type="array">
+        <value type="string" value="networking disabled"/>
+        <value type="string" value="wi-fi network connection “spirit-of-76” active: spirit-of-76 (79%)"/>
+        <value type="string" value="wi-fi network connection “spirit-of-76” active: spirit-of-76 (80%)"/>
+        <value type="string" value="wi-fi network connection “spirit-of-76” active: spirit-of-76 (96%)"/>
+        <value type="string" value="wi-fi network connection “spirit-of-76” active: spirit-of-76 (92%)"/>
+        <value type="string" value="wi-fi network connection “spirit-of-76” active: spirit-of-76 (81%)"/>
+        <value type="string" value="wi-fi network connection “spirit-of-76” active: spirit-of-76 (84%)"/>
+        <value type="string" value="wi-fi network connection “spirit-of-76” active: spirit-of-76 (88%)"/>
+        <value type="string" value="wi-fi network connection “spirit-of-76” active: spirit-of-76 (94%)"/>
+        <value type="string" value="wi-fi network connection “spirit-of-76” active: spirit-of-76 (59%)"/>
+        <value type="string" value="wi-fi network connection “spirit-of-76” active: spirit-of-76 (54%)"/>
+        <value type="string" value="wi-fi network connection “spirit-of-76” active: spirit-of-76 (78%)"/>
+        <value type="string" value="wi-fi network connection “spirit-of-76” active: spirit-of-76 (72%)"/>
+        <value type="string" value="wi-fi network connection “spirit-of-76” active: spirit-of-76 (75%)"/>
+        <value type="string" value="wi-fi network connection “spirit-of-76” active: spirit-of-76 (76%)"/>
+        <value type="string" value="wi-fi network connection “spirit-of-76” active: spirit-of-76 (71%)"/>
+        <value type="string" value="wi-fi network connection “spirit-of-76” active: spirit-of-76 (74%)"/>
+        <value type="string" value="wi-fi network connection “spirit-of-76” active: spirit-of-76 (61%)"/>
+        <value type="string" value="requesting an ethernet network address for “wired connection 1”…"/>
+        <value type="string" value="wi-fi network connection “spirit-of-76” active: spirit-of-76 (70%)"/>
+        <value type="string" value="wi-fi network connection “spirit-of-76” active: spirit-of-76 (73%)"/>
+        <value type="string" value="wi-fi network connection “spirit-of-76” active: spirit-of-76 (97%)"/>
+        <value type="string" value="wi-fi network connection “spirit-of-76” active: spirit-of-76 (69%)"/>
+        <value type="string" value="wi-fi network connection “spirit-of-76” active: spirit-of-76 (68%)"/>
+        <value type="string" value="ethernet network connection “wired connection 1” active"/>
+        <value type="string" value="notes"/>
+        <value type="string" value="xfce terminal"/>
+        <value type="string" value="anydesk"/>
+        <value type="string" value="pamac-tray"/>
+        <value type="string" value="thunar"/>
+        <value type="string" value="blueberry-tray.py"/>
+        <value type="string" value="networkmanager applet"/>
+      </property>
+      <property name="known-items" type="array">
+        <value type="string" value="qBittorrent"/>
+        <value type="string" value="blueman"/>
+        <value type="string" value="vlc"/>
+        <value type="string" value="acetoneiso"/>
+        <value type="string" value="Fusion Icon"/>
+        <value type="string" value="steam"/>
+        <value type="string" value="TeamViewer"/>
+        <value type="string" value="octopi-notifier"/>
+        <value type="string" value="discord1"/>
+      </property>
+    </property>
+    <property name="plugin-8" type="string" value="pulseaudio">
+      <property name="enable-keyboard-shortcuts" type="bool" value="true"/>
+      <property name="show-notifications" type="bool" value="true"/>
+      <property name="mpris-players" type="string" value="chromium.instance1174;chromium.instance1181;chromium.instance1252;chromium.instance145182;chromium.instance3084;chromium.instance3903;firefox.instance108973;firefox.instance12329;firefox.instance14002;firefox.instance14680;firefox.instance17474;firefox.instance2455;firefox.instance24631;firefox.instance2678;firefox.instance3455;firefox.instance3500;firefox.instance4266;firefox.instance4960;firefox.instance54166;firefox.instance54171;firefox.instance5455;firefox.instance9872;vlc"/>
+      <property name="play-sound" type="bool" value="true"/>
+      <property name="known-players" type="string" value="Firefox Web Browser"/>
+    </property>
+    <property name="plugin-9" type="string" value="power-manager-plugin"/>
+    <property name="plugin-12" type="string" value="clock">
+      <property name="timezone" type="string" value="EST5EDT"/>
+      <property name="digital-format" type="string" value="%a %h %d %l:%M %p"/>
+      <property name="mode" type="uint" value="2"/>
+      <property name="show-meridiem" type="bool" value="true"/>
+      <property name="digital-time-format" type="string" value="%d/%m/%Y - %l:%M%p"/>
+      <property name="digital-layout" type="uint" value="3"/>
+      <property name="digital-time-font" type="string" value="JetBrainsMonoNL Nerd Font Propo Bold 10"/>
+    </property>
+    <property name="plugin-4" type="string" value="weather">
+      <property name="location" type="empty">
+        <property name="name" type="string" value="Louisville, Jefferson County"/>
+        <property name="latitude" type="string" value="38.254238"/>
+        <property name="longitude" type="string" value="-85.759407"/>
+      </property>
+      <property name="msl" type="int" value="143"/>
+      <property name="timezone" type="string" value="America/Kentucky/Louisville"/>
+      <property name="offset" type="string" value="-04:00"/>
+      <property name="cache-max-age" type="int" value="172800"/>
+      <property name="power-saving" type="bool" value="true"/>
+      <property name="units" type="empty">
+        <property name="temperature" type="int" value="1"/>
+        <property name="pressure" type="int" value="2"/>
+        <property name="windspeed" type="int" value="1"/>
+        <property name="precipitation" type="int" value="1"/>
+        <property name="altitude" type="int" value="1"/>
+        <property name="apparent-temperature" type="int" value="0"/>
+      </property>
+      <property name="round" type="bool" value="true"/>
+      <property name="single-row" type="bool" value="true"/>
+      <property name="tooltip-style" type="int" value="1"/>
+      <property name="forecast" type="empty">
+        <property name="layout" type="int" value="1"/>
+        <property name="days" type="int" value="5"/>
+      </property>
+      <property name="theme-dir" type="string" value="/usr/share/xfce4/weather/icons/simplistic"/>
+      <property name="scrollbox" type="empty">
+        <property name="show" type="bool" value="true"/>
+        <property name="animate" type="bool" value="true"/>
+        <property name="lines" type="int" value="1"/>
+        <property name="color" type="string" value="rgba(0,0,0,0)"/>
+        <property name="use-color" type="bool" value="false"/>
+      </property>
+      <property name="labels" type="empty">
+        <property name="label0" type="int" value="3"/>
+        <property name="label1" type="int" value="9"/>
+      </property>
+    </property>
+    <property name="plugin-1" type="string" value="whiskermenu">
+      <property name="button-icon" type="string" value="/usr/share/pixmaps/stormos/menubutton.png"/>
+      <property name="favorites-in-recent" type="bool" value="true"/>
+      <property name="position-search-alternate" type="bool" value="true"/>
+      <property name="position-commands-alternate" type="bool" value="true"/>
+      <property name="position-categories-alternate" type="bool" value="true"/>
+      <property name="menu-opacity" type="int" value="95"/>
+      <property name="command-switchuser" type="string" value="dm-tool switch-to-greeter"/>
+      <property name="favorites" type="array">
+        <value type="string" value="xfce4-web-browser.desktop"/>
+        <value type="string" value="xfce4-mail-reader.desktop"/>
+        <value type="string" value="xfce4-file-manager.desktop"/>
+        <value type="string" value="xfce4-terminal-emulator.desktop"/>
+      </property>
+      <property name="recent" type="array">
+        <value type="string" value="xfce-settings-manager.desktop"/>
+        <value type="string" value="xfce4-terminal-emulator.desktop"/>
+        <value type="string" value="xfce-session-settings.desktop"/>
+        <value type="string" value="xfce4-terminal.desktop"/>
+        <value type="string" value="xfce-ui-settings.desktop"/>
+        <value type="string" value="xfce4-taskmanager.desktop"/>
+        <value type="string" value="xfce-display-settings.desktop"/>
+      </property>
+    </property>
+    <property name="plugin-17" type="string" value="separator">
+      <property name="expand" type="bool" value="true"/>
+      <property name="style" type="uint" value="0"/>
+    </property>
+    <property name="plugin-11" type="string" value="separator">
+      <property name="style" type="uint" value="0"/>
+    </property>
+    <property name="plugin-13" type="string" value="cpugraph">
+      <property name="update-interval" type="int" value="2"/>
+      <property name="time-scale" type="int" value="0"/>
+      <property name="size" type="int" value="16"/>
+      <property name="mode" type="int" value="1"/>
+      <property name="color-mode" type="int" value="0"/>
+      <property name="frame" type="int" value="0"/>
+      <property name="border" type="int" value="1"/>
+      <property name="bars" type="int" value="1"/>
+      <property name="per-core" type="int" value="0"/>
+      <property name="tracked-core" type="int" value="0"/>
+      <property name="in-terminal" type="int" value="1"/>
+      <property name="startup-notification" type="int" value="0"/>
+      <property name="load-threshold" type="int" value="0"/>
+      <property name="smt-stats" type="int" value="0"/>
+      <property name="smt-issues" type="int" value="0"/>
+      <property name="per-core-spacing" type="int" value="1"/>
+      <property name="command" type="string" value=""/>
+      <property name="background" type="array">
+        <value type="double" value="1"/>
+        <value type="double" value="1"/>
+        <value type="double" value="1"/>
+        <value type="double" value="0"/>
+      </property>
+      <property name="foreground-1" type="array">
+        <value type="double" value="0"/>
+        <value type="double" value="1"/>
+        <value type="double" value="0"/>
+        <value type="double" value="1"/>
+      </property>
+      <property name="foreground-2" type="array">
+        <value type="double" value="1"/>
+        <value type="double" value="0"/>
+        <value type="double" value="0"/>
+        <value type="double" value="1"/>
+      </property>
+      <property name="foreground-3" type="array">
+        <value type="double" value="0"/>
+        <value type="double" value="0"/>
+        <value type="double" value="1"/>
+        <value type="double" value="1"/>
+      </property>
+      <property name="smt-issues-color" type="array">
+        <value type="double" value="0.90000000000000002"/>
+        <value type="double" value="0"/>
+        <value type="double" value="0"/>
+        <value type="double" value="1"/>
+      </property>
+      <property name="foreground-system" type="array">
+        <value type="double" value="0.90000000000000002"/>
+        <value type="double" value="0.10000000000000001"/>
+        <value type="double" value="0.10000000000000001"/>
+        <value type="double" value="1"/>
+      </property>
+      <property name="foreground-user" type="array">
+        <value type="double" value="0.10000000000000001"/>
+        <value type="double" value="0.40000000000000002"/>
+        <value type="double" value="0.90000000000000002"/>
+        <value type="double" value="1"/>
+      </property>
+      <property name="foreground-nice" type="array">
+        <value type="double" value="0.90000000000000002"/>
+        <value type="double" value="0.80000000000000004"/>
+        <value type="double" value="0.20000000000000001"/>
+        <value type="double" value="1"/>
+      </property>
+      <property name="foreground-iowait" type="array">
+        <value type="double" value="0.20000000000000001"/>
+        <value type="double" value="0.90000000000000002"/>
+        <value type="double" value="0.40000000000000002"/>
+        <value type="double" value="1"/>
+      </property>
+    </property>
+    <property name="plugin-15" type="string" value="separator">
+      <property name="style" type="uint" value="0"/>
+    </property>
+    <property name="plugin-16" type="string" value="separator">
+      <property name="style" type="uint" value="0"/>
+    </property>
+    <property name="plugin-18" type="string" value="separator">
+      <property name="style" type="uint" value="0"/>
+    </property>
+    <property name="plugin-19" type="string" value="separator">
+      <property name="style" type="uint" value="0"/>
+    </property>
+    <property name="plugin-20" type="string" value="separator">
+      <property name="style" type="uint" value="0"/>
+    </property>
+    <property name="plugin-3" type="string" value="i3-workspaces"/>
+  </property>
+</channel>

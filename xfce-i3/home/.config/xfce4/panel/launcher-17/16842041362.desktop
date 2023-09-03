@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=kwin
+Comment=
+Exec=kwin_x11 --replace
+Icon=kde
+Path=
+Terminal=false
+StartupNotify=false

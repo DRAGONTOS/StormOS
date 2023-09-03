@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Software Installer
+Comment=Install selected software on the system
+Categories=System;
+Exec=pamac-installer %F
+Terminal=false
+Type=Application
+Icon=system-software-install
+StartupNotify=true
+NoDisplay=true
+MimeType=application/x-alpm-package;
+X-XFCE-Source=file:///usr/share/applications/pamac-installer.desktop

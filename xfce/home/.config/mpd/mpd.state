@@ -1,0 +1,37 @@
+sw_volume: 100
+audio_device_state:1:ALSA [Bit-perfect]
+audio_device_state:1:PulseAudio
+audio_device_state:1:Visualizer
+state: play
+current: 3
+time: 0.228000
+random: 0
+repeat: 1
+single: 0
+consume: 0
+crossfade: 2
+mixrampdb: 0.000000
+mixrampdelay: -1.000000
+playlist_begin
+0:Fav-Artists/Ken Ashcorp/Pvp - Single/01 Pvp.m4a
+1:Fav-Artists/Ken Ashcorp/20 Percent Cooler - Single/01 20 Percent Cooler.m4a
+2:Fav-Artists/Ken Ashcorp/Touch Fluffy Tail/01 Touch Fluffy Tail.m4a
+3:Fav-Artists/Ken Ashcorp/Supernatural/01 Supernatural.m4a
+4:Fav-Artists/Ken Ashcorp/Shut Up and Trust This/01 Shut Up and Trust This.m4a
+5:Fav-Artists/Ken Ashcorp/Rival/01 Rival.m4a
+6:Fav-Artists/Ken Ashcorp/Absolute Territory/01 Absolute Territory.m4a
+7:Fav-Artists/Ken Ashcorp/Crazy Chicks/01 Crazy Chicks.m4a
+8:Fav-Artists/Ken Ashcorp/In the Zone/01 In the Zone.m4a
+9:Fav-Artists/Ken Ashcorp/Burgz/01 Burgz.m4a
+10:Fav-Artists/Ken Ashcorp/Wear/01 Wear.m4a
+11:Fav-Artists/Ken Ashcorp/Hunter/01 Hunter.m4a
+12:Fav-Artists/Ken Ashcorp/On the Rocks/01 On the Rocks.m4a
+13:Fav-Artists/Ken Ashcorp/Hold My Hand/01 Hold My Hand.m4a
+14:Fav-Artists/Ken Ashcorp/Blue/01 Blue.m4a
+15:Fav-Artists/Ken Ashcorp/We're Shameless/01 We're Shameless.m4a
+16:Fav-Artists/Ken Ashcorp/Black Lily/01 Black Lily.m4a
+17:Fav-Artists/Ken Ashcorp/Take Me Home/01 Take Me Home.m4a
+18:Fav-Artists/Ken Ashcorp/Not One Less/01 Not One Less.m4a
+19:Fav-Artists/Ken Ashcorp/I'm Your Slave/01 I'm Your Slave.m4a
+20:Fav-Artists/Ken Ashcorp/Dare You to Love Me/01 Dare You to Love Me.m4a
+playlist_end

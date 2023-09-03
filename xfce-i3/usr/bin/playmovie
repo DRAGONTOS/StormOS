@@ -1,0 +1,21 @@
+#!/bin/bash
+
+
+
+
+SourceFile=$(zenity --file-selection  --title “Please select the location of the file you want to Play.” --width 500);
+
+
+
+xdg-open "$SourceFile" 
+
+
+
+
+
+
+
+
+
+
+

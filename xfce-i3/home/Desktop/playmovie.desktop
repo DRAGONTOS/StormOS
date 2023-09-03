@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=playmovie
+Comment=shortcut to playing movies
+Exec=/usr/bin/playmovie
+Icon=vlc
+Path=
+Terminal=false
+StartupNotify=false
