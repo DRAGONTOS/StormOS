@@ -40,8 +40,6 @@ echo ====================
 echo
 
 read -p "Choose an Option.. [1/0] " DESKTOP
-KEYMAP='us'
-# KEYMAP='dvorak'
 
 }
 
@@ -70,14 +68,14 @@ setup_disk() {
 
 setup_packages() {
 	# Actual pacstrap install
-		pacstrap -K /mnt base base-devel linux linux-firmware grub git kitty zsh btop sudo openssh networkmanager cryptsetup lvm2 vim nano neovim
+	pacstrap -K /mnt base base-devel linux linux-firmware grub git kitty zsh btop sudo openssh networkmanager cryptsetup lvm2 vim nano neovim
 	# Chaotic-AUR Install
-		cat > /mnt/chaoticaur.sh <<EOF
+	cat > /mnt/chaoticaur.sh <<EOF
 pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
 pacman-key --lsign-key 3056513887B78AEB
-pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
+pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst' --noconfirm
 EOF
-		arch-chroot /mnt sh chaoticaur.sh
+	arch-chroot /mnt sh chaoticaur.sh
 }
 
 choose_desktop() {
@@ -85,25 +83,28 @@ choose_desktop() {
 
 case $DESKTOP in
     '1')
-	    	pacman -Sy
-	## AUR Packages
+	pacman -Sy git glibc --noconfirm
+	arch-chroot /mnt pacman -Syu zenity pavucontrol xorg-xrandr xterm pulseaudio xfce4-pulseaudio-plugin firefox yay xfce4 xfce4-goodies plank kwin systemsettings kde-gtk-config neofetch lightdm-gtk-greeter lightdm colloid-gtk-theme-git surfn-icons-git --noconfirm
 
-		pacman -S yay --noconfirm
-	## Normal Packages
-
-		pacman -S git glibc --noconfirm
-		arch-chroot /mnt pacman -Syu xfce4 xfce4-goodies plank kwin systemsettings kde-gtk-config neofetch lightdm-gtk-greeter lightdm --noconfirm
 	## services
+	arch-chroot /mnt systemctl enable lightdm
 
-		arch-chroot /mnt systemctl enable lightdm
 	## Config files
+	mv -f /root/StormOS/xfce/home/.config /mnt/home/$USER/
+	mv -f /root/StormOS/xfce/home/.local/* /mnt/home/$USER/.local/
+	mv -f /root/StormOS/xfce/home/Desktop /mnt/home/$USER/
+	mv -f /root/StormOS/xfce/usr/local/bin/* /mnt/usr/local/bin/
+	mv -f /root/StormOS/xfce/usr/local/share/* /mnt/usr/local/share/
+	mv -f /root/StormOS/xfce/usr/share/themes/* /mnt/usr/share/themes/
+	mv -f /root/StormOS/xfce/usr/share/pixmaps/* /mnt/usr/share/pixmaps/
+	mv -f /root/StormOS/xfce/usr/share/backgrounds/* /mnt/usr/share/backgrounds/
+	mv -f /root/StormOS/xfce/usr/share/applications/* /mnt/usr/share/applications/
+	mv -f /root/StormOS/xfce/usr/bin/* /mnt/usr/bin/
+	cp -f /root/StormOS/xfce/etc/environment /mnt/etc/
+	cp -f /root/StormOS/xfce/etc/lightdm/* /mnt/etc/lightdm/
 
-		mkdir /root/xfce
-	#mkdir -p /mnt/home/$USER/git
-		git clone https://gitlab.com/bfitzgit23/stormos-etc-skel-config.git /root/xfce
-	#git clone https://aur.archlinux.org/yay-bin.git /mnt/$USER/git
-		mv /root/xfce/etc/skel/* /mnt/home/$USER/
-		chown -R rander:rander /mnt/home/$USER/
+	arch-chroot /mnt chown -R $USER:$USER /home/$USER
+	arch-chroot /mnt chmod +x /usr/bin/*
 	;;
     '2');;
     '3');;
@@ -184,7 +185,6 @@ LocalFileSigLevel = Optional
 
 # NOTE: You must run `pacman-key --init` before first using pacman; the local
 # keyring can then be populated with the keys of all official Arch Linux
-# packagers with `pacman-key --populate archlinux`.
 
 #
 # REPOSITORIES
@@ -339,12 +339,19 @@ EOF
     chmod 440 /etc/sudoers
 }
 
-
-
-
 setup_grub() {
-    arch-chroot /mnt grub-install $DRIVE
-    arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
+    	arch-chroot /mnt grub-install $DRIVE
+    	cp -rf /root/StormOS/grub/* /mnt/boot/grub/themes/
+	cp -rf /root/StormOS/default/* /mnt/etc/default/
+	arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
+}
+
+finishing_up() {
+ 	rm /mnt/chrootscript.sh
+ 	rm /mnt/chaoticaur.sh
+	cd
+	umount -R /mnt
+	reboot
 }
 
 configure() {
@@ -367,5 +374,6 @@ choose_desktop
 echo "setting up grub"
 setup_grub
 
+finishing_up
 }
 configure

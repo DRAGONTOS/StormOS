@@ -1,0 +1,14 @@
+[1]
+Active Tab Index=0
+Tab Count=2
+Tab Data 0=\x00\x00\x00\x02\x00\x00\x00\x00\x11file:///home/test\x00\x00\x00\x00\x01\x00\x00\x00\x19file:///home/test/Desktop\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x1b\x00\x00\x00\xff\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00\x01\x00\x00\xff\xff\xff\xff\x01\x00\x00\x00\x01\x00
+Tab Data 1=\x00\x00\x00\x02\x00\x00\x00\x00@file:///home/test/install-stormos/airootfs/etc/skel/.local/share\x00\x00\x00\x00\x01\x00\x00\x00Ffile:///home/test/install-stormos/airootfs/etc/skel/.local/share/baloo\x00\x00\x00\x02\x00\x00\x00Ffile:///home/test/install-stormos/airootfs/etc/skel/.local/share/baloo\x00\x00\x00Hfile:///home/test/install-stormos/airootfs/etc/skel/.local/share/dolphin\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x1b\x00\x00\x00\xff\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00\x01\x00\x00\xff\xff\xff\xff\x01\x00\x00\x00\x01\x00
+
+[WindowProperties1]
+ClassName=DolphinMainWindow
+ObjectName=Dolphin#1
+RestorePositionForNextInstance=false
+State=AAAA/wAAAAD9AAAAAwAAAAAAAAC4AAACRvwCAAAAAvsAAAAWAGYAbwBsAGQAZQByAHMARABvAGMAawAAAAAA/////wAAAAwBAAAF+wAAABQAcABsAGEAYwBlAHMARABvAGMAawEAAABEAAACRgAAAFQBAAAFAAAAAQAAAAAAAAAA/AIAAAAB+wAAABAAaQBuAGYAbwBEAG8AYwBrAAAAAAD/////AAAADAEAAAUAAAADAAAAAAAAAAD8AQAAAAH7AAAAGAB0AGUAcgBtAGkAbgBhAGwARABvAGMAawAAAAAA/////wAAAAwBAAAFAAACPQAAAkYAAAAEAAAABAAAAAgAAAAI/AAAAAEAAAACAAAAAQAAABYAbQBhAGkAbgBUAG8AbwBsAEIAYQByAQAAAAD/////AAAAAAAAAAA=
+Virtual1 Window-Maximized 800x600=true
+Virtual1 XPosition 1920x1080=580
+Virtual1 YPosition 1920x1080=207

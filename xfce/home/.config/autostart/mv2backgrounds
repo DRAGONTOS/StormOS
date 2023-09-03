@@ -1,0 +1,20 @@
+#! /usr/bin/bash
+
+if [[ $1 ]]; then
+	origin=$1
+else
+	origin='/usr/share/backgrounds'
+fi
+
+cd $origin
+
+d=$(ls -d */)
+if [[ $d ]]; then
+	for I in $d; do
+		sudo mv ./$I*.jpeg ./
+		sudo mv ./$I*.jpg ./
+		sudo mv ./$I*.png ./
+	done
+fi
+
+exit

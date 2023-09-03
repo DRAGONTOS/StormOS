@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Install StormOS
+GenericName=Live Installer (Calamares)
+Comment=Install the operating system to disk
+Exec=sudo /usr/bin/calamares %f
+Icon=/usr/share/pixmaps/stormos/menubutton.png
+Terminal=false
+StartupNotify=true
+Type=Application
+Categories=Qt;System;Desktop

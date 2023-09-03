@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=axelc8
+Comment=multi-downloader x8
+Exec=/usr/bin/axelc8
+Icon=alienarena
+Path=
+Terminal=false
+StartupNotify=false

@@ -1,0 +1,9 @@
+[Added Associations]
+text/plain=mousepad.desktop;org.xfce.mousepad.desktop;
+image/jpeg=viewnior.desktop;gimp.desktop;
+text/x-matlab=org.xfce.mousepad.desktop;
+
+[Default Applications]
+image/jpeg=viewnior.desktop
+text/x-matlab=org.xfce.mousepad.desktop
+text/plain=org.xfce.mousepad.desktop
