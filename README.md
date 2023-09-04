@@ -1,7 +1,7 @@
 # StormOS
 
 ## How to Install
-First boot with ARCHISO
+[THIS IN INTENDED TO BE RUN ON THE ARCHISO]
 ```
 pacman -Sy glibc git
 git clone https://github.com/dragontos/stormos.git
