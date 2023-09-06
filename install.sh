@@ -5,6 +5,10 @@ sudo pacman -Sy vim --noconfirm
 
 configeditask() {
 echo ""
+echo "=============================================="
+echo "  Welcome to the Advanced StormOS Installer  "
+echo "=============================================="
+echo ""
 echo "[ONLY DO THIS IF YOU KNOW WHAT YOU ARE DOING!!]"
 echo ""
 read -p "Do you want to edit the configuration file? (y/n): " confedti
@@ -103,7 +107,7 @@ setup_disk() {
 
 setup_packages() {
 	# Actual pacstrap install
-	pacstrap -K /mnt base base-devel plymouth linux linux-firmware linux-headers grub git kitty zsh btop sudo openssh networkmanager cryptsetup lvm2 vim nano neovim ttf-jetbrains-mono ttf-jetbrains-mono-nerd
+	pacstrap -K /mnt base base-devel plymouth linux linux-firmware linux-headers grub git kitty zsh btop sudo openssh networkmanager cryptsetup lvm2 vim nano neovim ttf-jetbrains-mono ttf-jetbrains-mono-nerd ttf-arimo-nerd ttf-tinos-nerd
 	# Chaotic-AUR Install
 	cat > /mnt/chaoticaur.sh <<EOF
 pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
@@ -119,7 +123,7 @@ choose_desktop() {
 case $DESKTOP in
     '1')
 	pacman -Sy git glibc --noconfirm
-	arch-chroot /mnt pacman -Syu zenity update-grub pavucontrol xorg-xrandr xterm pulseaudio xfce4-pulseaudio-plugin firefox yay xfce4 xfce4-goodies plank kwin systemsettings kde-gtk-config neofetch lightdm-gtk-greeter lightdm colloid-gtk-theme-git surfn-icons-git mpd mpv mpc ncmpcpp pulsemixer --noconfirm
+	arch-chroot /mnt pacman -Syu blueprint-compiler appstream-glib dmidecode rust gradience zenity update-grub pavucontrol xorg-xrandr xterm pulseaudio xfce4-pulseaudio-plugin firefox yay xfce4 xfce4-goodies plank kwin systemsettings kde-gtk-config neofetch lightdm-gtk-greeter lightdm colloid-gtk-theme-git surfn-icons-git mpd mpv mpc ncmpcpp pulsemixer --noconfirm
 mpd-discord-rpc.pkg.tar.zst
 	## services
 	arch-chroot /mnt systemctl enable lightdm
@@ -139,7 +143,7 @@ mpd-discord-rpc.pkg.tar.zst
 	mv -f /root/StormOS/xfce/home/.mozilla /mnt/home/$USER/
 	cp -f /root/StormOS/xfce/etc/environment /mnt/etc/
 	cp -f /root/StormOS/xfce/etc/lightdm/* /mnt/etc/lightdm/
-	cp -f /root/StormOS/binaries/mpd-discord-rpc.pkg.tar.zst /mnt/
+	cp -f /root/StormOS/binaries/mission-center-0.3.1-1-x86_64.pkg.tar.zst /mnt/
 
 	arch-chroot /mnt chown -R $USER:$USER /home/$USER
 	arch-chroot /mnt chmod +x /usr/bin/playmovie
@@ -147,11 +151,11 @@ mpd-discord-rpc.pkg.tar.zst
 	arch-chroot /mnt chmod +x /usr/bin/wgetm
 	arch-chroot /mnt chmod +x /usr/bin/menuxstorm
 
-	arch-chroot /mnt pacman -U mpd-discord-rpc.pkg.tar.zst --noconfirm
+	arch-chroot /mnt pacman -U mission-center-0.3.1-1-x86_64.pkg.tar.zst --noconfirm
 	;;
     '2')
 	pacman -Sy git glibc --noconfirm
-	arch-chroot /mnt pacman -Syu nitrogen picom ocs-url gnome-tweaks meson libconfig ninja asciidoc uthash libxdg-basedir i3 zenity update-grub pavucontrol xorg-xrandr xterm pulseaudio xfce4-pulseaudio-plugin firefox yay xfce4 xfce4-goodies kde-gtk-config neofetch lightdm-gtk-greeter lightdm colloid-gtk-theme-git surfn-icons-git mpd mpv mpc ncmpcpp pulsemixer xfce4-dev-tools --noconfirm
+	arch-chroot /mnt pacman -Syu blueprint-compiler appstream-glib dmidecode rust gradience nitrogen picom ocs-url gnome-tweaks meson libconfig ninja asciidoc uthash libxdg-basedir i3 zenity update-grub pavucontrol xorg-xrandr xterm pulseaudio xfce4-pulseaudio-plugin firefox yay xfce4 xfce4-goodies kde-gtk-config neofetch lightdm-gtk-greeter lightdm colloid-gtk-theme-git surfn-icons-git mpd mpv mpc ncmpcpp pulsemixer xfce4-dev-tools --noconfirm
 mpd-discord-rpc.pkg.tar.zst
 	## services
 	arch-chroot /mnt systemctl enable lightdm
@@ -172,9 +176,10 @@ mpd-discord-rpc.pkg.tar.zst
 	mv -f /root/StormOS/xfce-i3/home/.icons /mnt/home/$USER/
 	cp -f /root/StormOS/xfce-i3/etc/environment /mnt/etc/
 	cp -f /root/StormOS/xfce-i3/etc/lightdm/* /mnt/etc/lightdm/
-	cp -f /root/StormOS/binaries/mpd-discord-rpc.pkg.tar.zst /mnt/
 	cp -f /root/StormOS/binaries/i3ipc-glib-git-r183.1634568402.ef6d030-1-x86_64.pkg.tar.zst /mnt/
 	cp -f /root/StormOS/binaries/xfce4-i3-workspaces-plugin-git-1.4.2.r0.g427f165-1-x86_64.pkg.tar.zst /mnt/
+	cp -f /root/StormOS/binaries/mission-center-0.3.1-1-x86_64.pkg.tar.zst /mnt/
+
 
 	arch-chroot /mnt chown -R $USER:$USER /home/$USER
 	arch-chroot /mnt chmod +x /usr/bin/playmovie
@@ -182,9 +187,9 @@ mpd-discord-rpc.pkg.tar.zst
 	arch-chroot /mnt chmod +x /usr/bin/wgetm
 	arch-chroot /mnt chmod +x /usr/bin/menuxstorm
 
-	arch-chroot /mnt pacman -U mpd-discord-rpc.pkg.tar.zst --noconfirm
 	arch-chroot /mnt pacman -U i3ipc-glib-git-r183.1634568402.ef6d030-1-x86_64.pkg.tar.zst --noconfirm
 	arch-chroot /mnt pacman -U xfce4-i3-workspaces-plugin-git-1.4.2.r0.g427f165-1-x86_64.pkg.tar.zst --noconfirm
+	arch-chroot /mnt pacman -U mission-center-0.3.1-1-x86_64.pkg.tar.zst --noconfirm
 	arch-chroot /mnt pacman -R xfdesktop --noconfirm
 	;;
     '3');;
@@ -421,7 +426,7 @@ EOF
 
 setup_plymouth() {
 	mkdir -p /mnt/usr/share/plymouth/themes/natural-gentoo-remastered/
-	cp /root/StormOS/natural-gentoo-remastered/natural-gentoo-remastered.plymouth /mnt/usr/share/plymouth/themes/natural-gentoo-remastered/
+	#cp /root/StormOS/plymouth/natural-gentoo-remastered/natural-gentoo-remastered.plymouth /mnt/usr/share/plymouth/themes/natural-gentoo-remastered/
 }
 
 
@@ -436,6 +441,9 @@ setup_grub() {
 finishing_up() {
  	rm /mnt/chrootscript.sh
  	rm /mnt/chaoticaur.sh
+	rm /mnt/i3ipc-glib-git-r183.1634568402.ef6d030-1-x86_64.pkg.tar.zst
+	rm /mnt/xfce4-i3-workspaces-plugin-git-1.4.2.r0.g427f165-1-x86_64.pkg.tar.zst
+	rm /mnt/mission-center-0.3.1-1-x86_64.pkg.tar.zst
 	cd
 	read -p "Do you want REBOOT or Check? [y/n] " reck
 	case $confedti in

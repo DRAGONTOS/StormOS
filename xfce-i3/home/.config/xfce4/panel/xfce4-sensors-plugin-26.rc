@@ -1,0 +1,8 @@
+[General]
+Preferred_Height=509
+Number_Chips=1
+
+[Chip0]
+Name=ACPI
+Number=0
+
