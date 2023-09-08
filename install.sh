@@ -18,14 +18,14 @@ read -p "Do you want to edit the configuration file? (y/n): " confedti
 
 case $confedti in
 	'y')
-	vim /$root/StormOS/install.sh
+	vim /$root/stormos/install.sh
 	sleep 5
 	echo ''
 	echo 'Saved to install drive /mnt/home/$USER/Documents/InstallConfig'
 	echo ''
-	sed -i '14,16,38d' /$root/StormOS/install.sh
+	sed -i '14,16,38d' /$root/stormOS/install.sh
 	clear
-	sh /$root/StormOS/install.sh
+	sh /$root/stormos/install.sh
 	;;
 	*);;
 esac
@@ -234,21 +234,21 @@ case $DESKTOP in
 	arch-chroot /mnt systemctl enable lightdm
 
 	## Config files
-	mv -f /$root/StormOS/xfce/home/.config /mnt/home/$USER/
-	mv -f /$root/StormOS/xfce/home/.local/* /mnt/home/$USER/.local/
-	mv -f /$root/StormOS/xfce/home/Desktop /mnt/home/$USER/
-	mv -f /$root/StormOS/xfce/home/Music /mnt/home/$USER/
-	mv -f /$root/StormOS/xfce/usr/local/bin/* /mnt/usr/local/bin/
-	mv -f /$root/StormOS/xfce/usr/local/share/* /mnt/usr/local/share/
-	mv -f /$root/StormOS/xfce/usr/share/themes/* /mnt/usr/share/themes/
-	mv -f /$root/StormOS/xfce/usr/share/pixmaps/* /mnt/usr/share/pixmaps/
-	mv -f /$root/StormOS/xfce/usr/share/backgrounds/* /mnt/usr/share/backgrounds/
-	mv -f /$root/StormOS/xfce/usr/share/applications/* /mnt/usr/share/applications/
-	mv -f /$root/StormOS/xfce/usr/bin/* /mnt/usr/bin/
-	mv -f /$root/StormOS/xfce/home/.mozilla /mnt/home/$USER/
-	cp -f /$root/StormOS/xfce/etc/environment /mnt/etc/
-	cp -f /$root/StormOS/xfce/etc/lightdm/* /mnt/etc/lightdm/
-	cp -f /$root/StormOS/binaries/mission-center-0.3.1-1-x86_64.pkg.tar.zst /mnt/
+	mv -f /$root/stormos/xfce/home/.config /mnt/home/$USER/
+	mv -f /$root/stormos/xfce/home/.local/* /mnt/home/$USER/.local/
+	mv -f /$root/stormos/xfce/home/Desktop /mnt/home/$USER/
+	mv -f /$root/stormos/xfce/home/Music /mnt/home/$USER/
+	mv -f /$root/stormos/xfce/usr/local/bin/* /mnt/usr/local/bin/
+	mv -f /$root/stormos/xfce/usr/local/share/* /mnt/usr/local/share/
+	mv -f /$root/stormos/xfce/usr/share/themes/* /mnt/usr/share/themes/
+	mv -f /$root/stormos/xfce/usr/share/pixmaps/* /mnt/usr/share/pixmaps/
+	mv -f /$root/stormos/xfce/usr/share/backgrounds/* /mnt/usr/share/backgrounds/
+	mv -f /$root/stormos/xfce/usr/share/applications/* /mnt/usr/share/applications/
+	mv -f /$root/stormos/xfce/usr/bin/* /mnt/usr/bin/
+	mv -f /$root/stormos/xfce/home/.mozilla /mnt/home/$USER/
+	cp -f /$root/stormos/xfce/etc/environment /mnt/etc/
+	cp -f /$root/stormos/xfce/etc/lightdm/* /mnt/etc/lightdm/
+	cp -f /$root/stormos/binaries/mission-center-0.3.1-1-x86_64.pkg.tar.zst /mnt/
 
 	arch-chroot /mnt chown -R $USER:$USER /home/$USER
 	arch-chroot /mnt chmod +x /usr/bin/playmovie
@@ -268,24 +268,24 @@ case $DESKTOP in
 	arch-chroot /mnt systemctl enable lightdm
 
 	## Config files
-	mv -f /$root/StormOS/xfce-i3/home/.config /mnt/home/$USER/
-	mv -f /$root/StormOS/xfce-i3/home/.local/* /mnt/home/$USER/.local/
-	mv -f /$root/StormOS/xfce-i3/home/Desktop /mnt/home/$USER/
-	mv -f /$root/StormOS/xfce-i3/home/Music /mnt/home/$USER/
-	mv -f /$root/StormOS/xfce-i3/usr/local/bin/* /mnt/usr/local/bin/
-	mv -f /$root/StormOS/xfce-i3/usr/local/share/* /mnt/usr/local/share/
-	mv -f /$root/StormOS/xfce-i3/usr/share/themes/* /mnt/usr/share/themes/
-	mv -f /$root/StormOS/xfce-i3/usr/share/pixmaps/* /mnt/usr/share/pixmaps/
-	mv -f /$root/StormOS/xfce-i3/usr/share/backgrounds/* /mnt/usr/share/backgrounds/
-	mv -f /$root/StormOS/xfce-i3/usr/share/applications/* /mnt/usr/share/applications/
-	mv -f /$root/StormOS/xfce-i3/usr/bin/* /mnt/usr/bin/
-	mv -f /$root/StormOS/xfce-i3/home/.mozilla /mnt/home/$USER/
-	mv -f /$root/StormOS/xfce-i3/home/.icons /mnt/home/$USER/
-	cp -f /$root/StormOS/xfce-i3/etc/environment /mnt/etc/
-	cp -f /$root/StormOS/xfce-i3/etc/lightdm/* /mnt/etc/lightdm/
-	cp -f /$root/StormOS/binaries/i3ipc-glib-git-r183.1634568402.ef6d030-1-x86_64.pkg.tar.zst /mnt/
-	cp -f /$root/StormOS/binaries/xfce4-i3-workspaces-plugin-git-1.4.2.r0.g427f165-1-x86_64.pkg.tar.zst /mnt/
-	cp -f /$root/StormOS/binaries/mission-center-0.3.1-1-x86_64.pkg.tar.zst /mnt/
+	mv -f /$root/stormos/xfce-i3/home/.config /mnt/home/$USER/
+	mv -f /$root/stormos/xfce-i3/home/.local/* /mnt/home/$USER/.local/
+	mv -f /$root/stormos/xfce-i3/home/Desktop /mnt/home/$USER/
+	mv -f /$root/stormos/xfce-i3/home/Music /mnt/home/$USER/
+	mv -f /$root/stormos/xfce-i3/usr/local/bin/* /mnt/usr/local/bin/
+	mv -f /$root/stormos/xfce-i3/usr/local/share/* /mnt/usr/local/share/
+	mv -f /$root/stormos/xfce-i3/usr/share/themes/* /mnt/usr/share/themes/
+	mv -f /$root/stormos/xfce-i3/usr/share/pixmaps/* /mnt/usr/share/pixmaps/
+	mv -f /$root/stormos/xfce-i3/usr/share/backgrounds/* /mnt/usr/share/backgrounds/
+	mv -f /$root/stormos/xfce-i3/usr/share/applications/* /mnt/usr/share/applications/
+	mv -f /$root/stormos/xfce-i3/usr/bin/* /mnt/usr/bin/
+	mv -f /$root/stormos/xfce-i3/home/.mozilla /mnt/home/$USER/
+	mv -f /$root/stormos/xfce-i3/home/.icons /mnt/home/$USER/
+	cp -f /$root/stormos/xfce-i3/etc/environment /mnt/etc/
+	cp -f /$root/stormos/xfce-i3/etc/lightdm/* /mnt/etc/lightdm/
+	cp -f /$root/stormos/binaries/i3ipc-glib-git-r183.1634568402.ef6d030-1-x86_64.pkg.tar.zst /mnt/
+	cp -f /$root/stormos/binaries/xfce4-i3-workspaces-plugin-git-1.4.2.r0.g427f165-1-x86_64.pkg.tar.zst /mnt/
+	cp -f /$root/stormos/binaries/mission-center-0.3.1-1-x86_64.pkg.tar.zst /mnt/
 
 
 	arch-chroot /mnt chown -R $USER:$USER /home/$USER
@@ -552,8 +552,8 @@ setup_grub() {
     		arch-chroot /mnt grub-install $DRIVE
 	fi
 
-    	cp -rf /$root/StormOS/grub/* /mnt/boot/grub/themes/
-	cp -rf /$root/StormOS/default/* /mnt/etc/default/
+    	cp -rf /$root/stormos/grub/* /mnt/boot/grub/themes/
+	cp -rf /$root/stormos/default/* /mnt/etc/default/
 	arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
 }
 
@@ -570,7 +570,7 @@ finishing_up() {
 	case $confedti in
 		'y')
 		mkdir -p /mnt/home/$USER/Documents/InstallConfig
-		cp /$root/StormOS/install.sh /mnt/home/$USER/Documents/InstallConfig/
+		cp /$root/stormos/install.sh /mnt/home/$USER/Documents/InstallConfig/
 		;;
 		*)
 		;;
