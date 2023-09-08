@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
 #
+# What root is the script cloned in eg /root/StormOS and root is what you need to change for customizability
+root="root"
 
 sudo pacman -Sy vim --noconfirm
 
 configeditask() {
+clear
 echo ""
 echo "=============================================="
 echo "  Welcome to the Advanced StormOS Installer  "
@@ -15,13 +18,14 @@ read -p "Do you want to edit the configuration file? (y/n): " confedti
 
 case $confedti in
 	'y')
-	vim /root/StormOS/install.sh
+	vim /$root/StormOS/install.sh
 	sleep 5
 	echo ''
 	echo 'Saved to install drive /mnt/home/$USER/Documents/InstallConfig'
 	echo ''
+	sed -i '14,16,38d' /$root/StormOS/install.sh
 	clear
-	sh /root/StormOS/install.sh
+	sh /$root/StormOS/install.sh
 	;;
 	*);;
 esac
@@ -42,20 +46,59 @@ read -p "Please specify which drive it should be installed on [/dev/sda]: " DRIV
 read -p "Please input your Hostname: " HOSTNAME
 #HOSTNAME='stormos'
 
-# Root password (leave blank to be prompted).
-# Comment this out and uncomment ROOTPASS if you want to set the configuration manually
-read -p "Please input an Password for root: " ROOTPASS
-#ROOTPASS='dt'
-
 # Main user to create (by default, added to wheel group, and others).
 # Comment this out and uncomment USER if you want to set the configuration manually
 read -p "Please input a username for user: " USER
 #USER='namumi'
 
-# The main user's password.
-# Comment this out and uncomment USERPASS if you want to set the configuration manually
-read -p "Please input an Password for user: " USERPASS
-#USERPASS='dt'
+manualmode="false"
+
+
+if [ "$manualmode" == "false" ]; then
+# User Password
+while true; do
+    # Display a custom prompt and then read the password (hidden with asterisks)
+    echo -n "Please enter your password for user $USER "
+    read -s password
+
+    # Confirm the password by asking the user to enter it again (hidden with asterisks)
+    echo -e "\nConfirm your password: "
+    read -s confirm_password
+
+    # Check if the passwords match
+    if [ "$password" == "$confirm_password" ]; then
+        echo -e "\nPasswords match!"
+	USERPASS="$password"
+        break  # Exit the loop if passwords match
+    else
+        echo -e "\nPasswords do not match. Please try again."
+    fi
+done
+
+# Root Password
+while true; do
+    # Display a custom prompt and then read the password (hidden with asterisks)
+    echo -n "Please enter your password for root "
+    read -s password
+
+    # Confirm the password by asking the user to enter it again (hidden with asterisks)
+    echo -e "\nConfirm your password: "
+    read -s confirm_password
+
+    # Check if the passwords match
+    if [ "$password" == "$confirm_password" ]; then
+        echo -e "\nPasswords match!"
+	ROOTPASS="$password"
+        break  # Exit the loop if passwords match
+    else
+        echo -e "\nPasswords do not match. Please try again."
+    fi
+done
+
+else
+	ROOTPASS="dt"
+	USERPASS="dt"
+fi
 
 # System timezone.
 # Comment this out and uncomment TIMEZONE if you want to set the configuration manually
@@ -83,31 +126,61 @@ read -p "Choose an Option.. [1/0] " DESKTOP
 }
 
 setup_disk() {
-    # Create an MBR partition table
-    parted $DRIVE mklabel msdos
+	if [ -d "/sys/firmware/efi/" ]; then
+    		# Create a GPT partition table
+    		parted $DRIVE mklabel gpt
 
-    # Create the "boot" partition (FAT32)
-    parted $DRIVE mkpart primary fat32 1MiB 1GB
-    parted $DRIVE set 1 boot on
+    		# Create the "EFI System Partition" (ESP) - 1GB (adjust the size as needed)
+    		parted $DRIVE mkpart primary fat32 1MiB 1GB
+    		parted $DRIVE set 1 esp on
 
-    # Create the "root" partition (ext4, using the rest of the disk)
-    parted $DRIVE mkpart primary ext4 1GB 100%
+    		# Create the "root" partition (ext4, using the rest of the disk)
+    		parted $DRIVE mkpart primary ext4 1GB 100%
 
-    # Format the "boot" partition as FAT32
-    mkfs.fat -F32 ${DRIVE}1
+    		# Format the ESP as FAT32
+    		mkfs.fat -F32 ${DRIVE}1
 
-    # Format the "root" partition as ext4
-    mkfs.ext4 ${DRIVE}2
+    		# Format the "root" partition as ext4
+    		mkfs.ext4 ${DRIVE}2
 
-    # Mount disks
-    mount ${DRIVE}2 /mnt
-    mkdir /mnt/boot
-    mount ${DRIVE}1 /mnt/boot
+    		# Mount the root partition
+    		mount ${DRIVE}2 /mnt
+
+    		# Create the "boot" directory in the root partition
+    		mkdir -p /mnt/boot/efi
+
+    		# Mount the ESP to /mnt/boot
+    		mount ${DRIVE}1 /mnt/boot/efi
+
+	else
+		# Create an MBR partition table
+    		parted $DRIVE mklabel msdos
+
+    		# Create the "boot" partition (FAT32)
+    		parted $DRIVE mkpart primary fat32 1MiB 1GB
+    		parted $DRIVE set 1 boot on
+
+    		# Create the "root" partition (ext4, using the rest of the disk)
+    		parted $DRIVE mkpart primary ext4 1GB 100%
+
+    		# Format the "boot" partition as FAT32
+    		mkfs.fat -F32 ${DRIVE}1
+
+    		# Format the "root" partition as ext4
+    		mkfs.ext4 ${DRIVE}2
+
+    		# Mount disks
+    		mount ${DRIVE}2 /mnt
+    		mkdir /mnt/boot
+    		mount ${DRIVE}1 /mnt/boot
+	fi
+
+
 }
 
 setup_packages() {
 	# Actual pacstrap install
-	pacstrap -K /mnt base base-devel plymouth linux linux-firmware linux-headers grub git kitty zsh btop sudo openssh networkmanager cryptsetup lvm2 vim nano neovim ttf-jetbrains-mono ttf-jetbrains-mono-nerd ttf-arimo-nerd ttf-tinos-nerd
+	pacstrap -K /mnt base base-devel plymouth linux linux-firmware linux-headers grub efibootmgr git kitty zsh btop sudo openssh networkmanager cryptsetup lvm2 vim nano neovim ttf-jetbrains-mono ttf-jetbrains-mono-nerd ttf-arimo-nerd ttf-tinos-nerd
 	# Chaotic-AUR Install
 	cat > /mnt/chaoticaur.sh <<EOF
 pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
@@ -122,28 +195,60 @@ choose_desktop() {
 
 case $DESKTOP in
     '1')
+	# var for wanted packages
+	packagesdes1=("qt5ct" \
+		"blueprint-compiler" \
+		"appstream-glib" \
+		"dmidecode" \
+		"rust" \
+		"gradience" \
+		"zenity" \
+		"update-grub" \
+		"pavucontrol" \
+		"xorg-xrandr" \
+		"xterm" \
+		"pulseaudio" \
+		"xfce4-pulseaudio-plugin" \
+		"firefox" \
+		"yay" \
+		"xfce4" \
+		"xfce4-goodies" \
+		"plank" \
+		"kwin" \
+		"systemsettings" \
+		"kde-gtk-config" \
+		"neofetch" \
+		"lightdm-gtk-greeter" \
+		"lightdm" \
+		"colloid-gtk-theme-git" \
+		"surfn-icons-git" \
+		"mpd" \
+		"mpv" \
+		"mpc" \
+		"ncmpcpp" \
+		"pulsemixer")
+
 	pacman -Sy git glibc --noconfirm
-	arch-chroot /mnt pacman -Syu blueprint-compiler appstream-glib dmidecode rust gradience zenity update-grub pavucontrol xorg-xrandr xterm pulseaudio xfce4-pulseaudio-plugin firefox yay xfce4 xfce4-goodies plank kwin systemsettings kde-gtk-config neofetch lightdm-gtk-greeter lightdm colloid-gtk-theme-git surfn-icons-git mpd mpv mpc ncmpcpp pulsemixer --noconfirm
-mpd-discord-rpc.pkg.tar.zst
+	arch-chroot /mnt pacman -Syu "${packagesdes1[@]}" --noconfirm
 	## services
 	arch-chroot /mnt systemctl enable lightdm
 
 	## Config files
-	mv -f /root/StormOS/xfce/home/.config /mnt/home/$USER/
-	mv -f /root/StormOS/xfce/home/.local/* /mnt/home/$USER/.local/
-	mv -f /root/StormOS/xfce/home/Desktop /mnt/home/$USER/
-	mv -f /root/StormOS/xfce/home/Music /mnt/home/$USER/
-	mv -f /root/StormOS/xfce/usr/local/bin/* /mnt/usr/local/bin/
-	mv -f /root/StormOS/xfce/usr/local/share/* /mnt/usr/local/share/
-	mv -f /root/StormOS/xfce/usr/share/themes/* /mnt/usr/share/themes/
-	mv -f /root/StormOS/xfce/usr/share/pixmaps/* /mnt/usr/share/pixmaps/
-	mv -f /root/StormOS/xfce/usr/share/backgrounds/* /mnt/usr/share/backgrounds/
-	mv -f /root/StormOS/xfce/usr/share/applications/* /mnt/usr/share/applications/
-	mv -f /root/StormOS/xfce/usr/bin/* /mnt/usr/bin/
-	mv -f /root/StormOS/xfce/home/.mozilla /mnt/home/$USER/
-	cp -f /root/StormOS/xfce/etc/environment /mnt/etc/
-	cp -f /root/StormOS/xfce/etc/lightdm/* /mnt/etc/lightdm/
-	cp -f /root/StormOS/binaries/mission-center-0.3.1-1-x86_64.pkg.tar.zst /mnt/
+	mv -f /$root/StormOS/xfce/home/.config /mnt/home/$USER/
+	mv -f /$root/StormOS/xfce/home/.local/* /mnt/home/$USER/.local/
+	mv -f /$root/StormOS/xfce/home/Desktop /mnt/home/$USER/
+	mv -f /$root/StormOS/xfce/home/Music /mnt/home/$USER/
+	mv -f /$root/StormOS/xfce/usr/local/bin/* /mnt/usr/local/bin/
+	mv -f /$root/StormOS/xfce/usr/local/share/* /mnt/usr/local/share/
+	mv -f /$root/StormOS/xfce/usr/share/themes/* /mnt/usr/share/themes/
+	mv -f /$root/StormOS/xfce/usr/share/pixmaps/* /mnt/usr/share/pixmaps/
+	mv -f /$root/StormOS/xfce/usr/share/backgrounds/* /mnt/usr/share/backgrounds/
+	mv -f /$root/StormOS/xfce/usr/share/applications/* /mnt/usr/share/applications/
+	mv -f /$root/StormOS/xfce/usr/bin/* /mnt/usr/bin/
+	mv -f /$root/StormOS/xfce/home/.mozilla /mnt/home/$USER/
+	cp -f /$root/StormOS/xfce/etc/environment /mnt/etc/
+	cp -f /$root/StormOS/xfce/etc/lightdm/* /mnt/etc/lightdm/
+	cp -f /$root/StormOS/binaries/mission-center-0.3.1-1-x86_64.pkg.tar.zst /mnt/
 
 	arch-chroot /mnt chown -R $USER:$USER /home/$USER
 	arch-chroot /mnt chmod +x /usr/bin/playmovie
@@ -154,31 +259,33 @@ mpd-discord-rpc.pkg.tar.zst
 	arch-chroot /mnt pacman -U mission-center-0.3.1-1-x86_64.pkg.tar.zst --noconfirm
 	;;
     '2')
+	# var for wanted packages
+	packagesdes2=("qt5ct" "blueprint-compiler" "appstream-glib" "dmidecode" "rust" "gradience" "nitrogen" "picom" "ocs-url" "gnome-tweaks" "meson" "libconfig" "ninja" "asciidoc" "uthash" "libxdg-basedir" "i3" "zenity" "update-grub" "pavucontrol" "xorg-xrandr" "xterm" "pulseaudio" "xfce4-pulseaudio-plugin" "firefox" "yay" "xfce4" "xfce4-goodies" "kde-gtk-config" "neofetch" "lightdm-gtk-greeter" "lightdm" "colloid-gtk-theme-git" "surfn-icons-git" "mpd" "mpv" "mpc" "ncmpcpp" "pulsemixer" "xfce4-dev-tools")
+
 	pacman -Sy git glibc --noconfirm
-	arch-chroot /mnt pacman -Syu blueprint-compiler appstream-glib dmidecode rust gradience nitrogen picom ocs-url gnome-tweaks meson libconfig ninja asciidoc uthash libxdg-basedir i3 zenity update-grub pavucontrol xorg-xrandr xterm pulseaudio xfce4-pulseaudio-plugin firefox yay xfce4 xfce4-goodies kde-gtk-config neofetch lightdm-gtk-greeter lightdm colloid-gtk-theme-git surfn-icons-git mpd mpv mpc ncmpcpp pulsemixer xfce4-dev-tools --noconfirm
-mpd-discord-rpc.pkg.tar.zst
+	arch-chroot /mnt pacman -Syu "${packagesdes2[@]}" --noconfirm
 	## services
 	arch-chroot /mnt systemctl enable lightdm
 
 	## Config files
-	mv -f /root/StormOS/xfce-i3/home/.config /mnt/home/$USER/
-	mv -f /root/StormOS/xfce-i3/home/.local/* /mnt/home/$USER/.local/
-	mv -f /root/StormOS/xfce-i3/home/Desktop /mnt/home/$USER/
-	mv -f /root/StormOS/xfce-i3/home/Music /mnt/home/$USER/
-	mv -f /root/StormOS/xfce-i3/usr/local/bin/* /mnt/usr/local/bin/
-	mv -f /root/StormOS/xfce-i3/usr/local/share/* /mnt/usr/local/share/
-	mv -f /root/StormOS/xfce-i3/usr/share/themes/* /mnt/usr/share/themes/
-	mv -f /root/StormOS/xfce-i3/usr/share/pixmaps/* /mnt/usr/share/pixmaps/
-	mv -f /root/StormOS/xfce-i3/usr/share/backgrounds/* /mnt/usr/share/backgrounds/
-	mv -f /root/StormOS/xfce-i3/usr/share/applications/* /mnt/usr/share/applications/
-	mv -f /root/StormOS/xfce-i3/usr/bin/* /mnt/usr/bin/
-	mv -f /root/StormOS/xfce-i3/home/.mozilla /mnt/home/$USER/
-	mv -f /root/StormOS/xfce-i3/home/.icons /mnt/home/$USER/
-	cp -f /root/StormOS/xfce-i3/etc/environment /mnt/etc/
-	cp -f /root/StormOS/xfce-i3/etc/lightdm/* /mnt/etc/lightdm/
-	cp -f /root/StormOS/binaries/i3ipc-glib-git-r183.1634568402.ef6d030-1-x86_64.pkg.tar.zst /mnt/
-	cp -f /root/StormOS/binaries/xfce4-i3-workspaces-plugin-git-1.4.2.r0.g427f165-1-x86_64.pkg.tar.zst /mnt/
-	cp -f /root/StormOS/binaries/mission-center-0.3.1-1-x86_64.pkg.tar.zst /mnt/
+	mv -f /$root/StormOS/xfce-i3/home/.config /mnt/home/$USER/
+	mv -f /$root/StormOS/xfce-i3/home/.local/* /mnt/home/$USER/.local/
+	mv -f /$root/StormOS/xfce-i3/home/Desktop /mnt/home/$USER/
+	mv -f /$root/StormOS/xfce-i3/home/Music /mnt/home/$USER/
+	mv -f /$root/StormOS/xfce-i3/usr/local/bin/* /mnt/usr/local/bin/
+	mv -f /$root/StormOS/xfce-i3/usr/local/share/* /mnt/usr/local/share/
+	mv -f /$root/StormOS/xfce-i3/usr/share/themes/* /mnt/usr/share/themes/
+	mv -f /$root/StormOS/xfce-i3/usr/share/pixmaps/* /mnt/usr/share/pixmaps/
+	mv -f /$root/StormOS/xfce-i3/usr/share/backgrounds/* /mnt/usr/share/backgrounds/
+	mv -f /$root/StormOS/xfce-i3/usr/share/applications/* /mnt/usr/share/applications/
+	mv -f /$root/StormOS/xfce-i3/usr/bin/* /mnt/usr/bin/
+	mv -f /$root/StormOS/xfce-i3/home/.mozilla /mnt/home/$USER/
+	mv -f /$root/StormOS/xfce-i3/home/.icons /mnt/home/$USER/
+	cp -f /$root/StormOS/xfce-i3/etc/environment /mnt/etc/
+	cp -f /$root/StormOS/xfce-i3/etc/lightdm/* /mnt/etc/lightdm/
+	cp -f /$root/StormOS/binaries/i3ipc-glib-git-r183.1634568402.ef6d030-1-x86_64.pkg.tar.zst /mnt/
+	cp -f /$root/StormOS/binaries/xfce4-i3-workspaces-plugin-git-1.4.2.r0.g427f165-1-x86_64.pkg.tar.zst /mnt/
+	cp -f /$root/StormOS/binaries/mission-center-0.3.1-1-x86_64.pkg.tar.zst /mnt/
 
 
 	arch-chroot /mnt chown -R $USER:$USER /home/$USER
@@ -199,6 +306,7 @@ esac
 
 }
 
+# Sets up things in chroot
 chrootscript() {
 touch /mnt/chrootscript.sh
 cp config /mnt/
@@ -221,6 +329,7 @@ EOF
 arch-chroot /mnt sh chrootscript.sh
 }
 
+# This cats config files.
 setup_configs() {
   cat > /mnt/etc/pacman.conf <<EOF
 #
@@ -424,21 +533,33 @@ EOF
     chmod 440 /etc/sudoers
 }
 
+# Sets up the plymouth theme (This is doesn't matter)
 setup_plymouth() {
-	mkdir -p /mnt/usr/share/plymouth/themes/natural-gentoo-remastered/
-	#cp /root/StormOS/plymouth/natural-gentoo-remastered/natural-gentoo-remastered.plymouth /mnt/usr/share/plymouth/themes/natural-gentoo-remastered/
+	#mkdir -p /mnt/usr/share/plymouth/themes/natural-gentoo-remastered/
+	#cp /$root/StormOS/plymouth/natural-gentoo-remastered/natural-gentoo-remastered.plymouth /mnt/usr/share/plymouth/themes/natural-gentoo-remastered/
+	echo "This is not used because you are on branch Arch"
 }
 
 
 setup_grub() {
 	genfstab -U /mnt >> /mnt/etc/fstab
-    	arch-chroot /mnt grub-install $DRIVE
-    	cp -rf /root/StormOS/grub/* /mnt/boot/grub/themes/
-	cp -rf /root/StormOS/default/* /mnt/etc/default/
+	if [ -d "/sys/firmware/efi/" ]; then
+    		echo "EFI mode"
+		mkdir -p /mnt/boot/efi
+		arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/efi
+	else
+    		echo "BIOS mode"
+    		arch-chroot /mnt grub-install $DRIVE
+	fi
+
+    	cp -rf /$root/StormOS/grub/* /mnt/boot/grub/themes/
+	cp -rf /$root/StormOS/default/* /mnt/etc/default/
 	arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
 }
 
+#Finishing touches
 finishing_up() {
+	# Removes all unneeded files
  	rm /mnt/chrootscript.sh
  	rm /mnt/chaoticaur.sh
 	rm /mnt/i3ipc-glib-git-r183.1634568402.ef6d030-1-x86_64.pkg.tar.zst
@@ -449,7 +570,7 @@ finishing_up() {
 	case $confedti in
 		'y')
 		mkdir -p /mnt/home/$USER/Documents/InstallConfig
-		cp /root/StormOS/install.sh /mnt/home/$USER/Documents/InstallConfig/
+		cp /$root/StormOS/install.sh /mnt/home/$USER/Documents/InstallConfig/
 		;;
 		*)
 		;;
@@ -469,6 +590,7 @@ finishing_up() {
 	esac
 }
 
+# This executes all the functions()
 configure() {
 configeditask
 
