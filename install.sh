@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 #
-# What root is the script cloned in eg /root/StormOS and root is what you need to change for customizability
+# What root is the script cloned in eg /root/stormos and root is what you need to change for customizability
 root="root"
+sed -i '6d' /$root/stormos/install.sh
+#sh /$root/stormos/install.sh > install_log.txt 2>&1
 
 sudo pacman -Sy vim --noconfirm
 
@@ -23,7 +25,7 @@ case $confedti in
 	echo ''
 	echo 'Saved to install drive /mnt/home/$USER/Documents/InstallConfig'
 	echo ''
-	sed -i '14,16,38d' /$root/stormOS/install.sh
+	sed -i '14,16,38d' /$root/stormos/install.sh
 	clear
 	sh /$root/stormos/install.sh
 	;;
@@ -179,9 +181,33 @@ setup_disk() {
 }
 
 setup_packages() {
+	pacpakpak=("base" \
+		"base-devel" \
+		"plymouth" \
+		"linux" \
+		"linux-firmware" \
+		"linux-headers" \
+		"grub" \
+		"efibootmgr" \
+		"git" \
+		"kitty" \
+		"zsh" \
+		"btop" \
+		"sudo" \
+		"openssh" \
+		"networkmanager" \
+		"cryptsetup" \
+		"lvm2" \
+		"vim" \
+		"nano" \
+		"neovim" \
+		"ttf-jetbrains-mono" \
+		"ttf-jetbrains-mono-nerd" \
+		"ttf-arimo-nerd" \
+		"ttf-tinos-nerd")
+
 	# Actual pacstrap install
-	pacstrap -K /mnt base base-devel plymouth linux linux-firmware linux-headers grub efibootmgr git kitty zsh btop sudo openssh networkmanager cryptsetup lvm2 vim nano neovim ttf-jetbrains-mono ttf-jetbrains-mono-nerd ttf-arimo-nerd ttf-tinos-nerd
-	# Chaotic-AUR Install
+	pacstrap -K /mnt "${pacpakpak[@]}"	# Chaotic-AUR Install
 	cat > /mnt/chaoticaur.sh <<EOF
 pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
 pacman-key --lsign-key 3056513887B78AEB
@@ -228,7 +254,6 @@ case $DESKTOP in
 		"ncmpcpp" \
 		"pulsemixer")
 
-	pacman -Sy git glibc --noconfirm
 	arch-chroot /mnt pacman -Syu "${packagesdes1[@]}" --noconfirm
 	## services
 	arch-chroot /mnt systemctl enable lightdm
@@ -260,9 +285,47 @@ case $DESKTOP in
 	;;
     '2')
 	# var for wanted packages
-	packagesdes2=("qt5ct" "blueprint-compiler" "appstream-glib" "dmidecode" "rust" "gradience" "nitrogen" "picom" "ocs-url" "gnome-tweaks" "meson" "libconfig" "ninja" "asciidoc" "uthash" "libxdg-basedir" "i3" "zenity" "update-grub" "pavucontrol" "xorg-xrandr" "xterm" "pulseaudio" "xfce4-pulseaudio-plugin" "firefox" "yay" "xfce4" "xfce4-goodies" "kde-gtk-config" "neofetch" "lightdm-gtk-greeter" "lightdm" "colloid-gtk-theme-git" "surfn-icons-git" "mpd" "mpv" "mpc" "ncmpcpp" "pulsemixer" "xfce4-dev-tools")
+	packagesdes2=("qt5ct" \
+		"blueprint-compiler" \
+		"appstream-glib" \
+		"dmidecode" \
+		"rust" \
+		"gradience" \
+		"nitrogen" \
+		"picom" \
+		"ocs-url" \
+		"gnome-tweaks" \
+		"meson" \
+		"libconfig" \
+		"ninja" \
+		"asciidoc" \
+		"uthash" \
+		"libxdg-basedir" \
+		"i3" \
+		"zenity" \
+		"update-grub" \
+		"pavucontrol" \
+		"xorg-xrandr" \
+		"xterm" \
+		"pulseaudio" \
+		"xfce4-pulseaudio-plugin" \
+		"firefox" \
+		"yay" \
+		"xfce4" \
+		"xfce4-goodies" \
+		"kde-gtk-config" \
+		"neofetch" \
+		"lightdm-gtk-greeter" \
+		"lightdm" \
+		"colloid-gtk-theme-git" \
+		"surfn-icons-git" \
+		"mpd" \
+		"mpv" \
+		"mpc" \
+		"ncmpcpp" \
+		"pulsemixer" \
+		"xfce4-dev-tools")
 
-	pacman -Sy git glibc --noconfirm
 	arch-chroot /mnt pacman -Syu "${packagesdes2[@]}" --noconfirm
 	## services
 	arch-chroot /mnt systemctl enable lightdm
@@ -320,7 +383,8 @@ systemctl enable sshd
 hwclock --systohc
 locale-gen
 echo "root:$ROOTPASS" | chpasswd
-useradd -m -s /bin/bash -G adm,systemd-journal,wheel,rfkill,games,network,video,audio,optical,floppy,storage,scanner,power "$USER"
+useradd -m "$USER"
+usermod -aG adm,systemd-journal,wheel,rfkill,games,network,video,audio,optical,floppy,storage,scanner,power "$USER"
 echo "$USER:$USERPASS" | chpasswd
 nmcli general hostname $HOSTNAME
 ln -sf /usr/share/zoneinfo/$TIMEZONE /etc/localtime
@@ -536,7 +600,7 @@ EOF
 # Sets up the plymouth theme (This is doesn't matter)
 setup_plymouth() {
 	#mkdir -p /mnt/usr/share/plymouth/themes/natural-gentoo-remastered/
-	#cp /$root/StormOS/plymouth/natural-gentoo-remastered/natural-gentoo-remastered.plymouth /mnt/usr/share/plymouth/themes/natural-gentoo-remastered/
+	#cp /$root/stormos/plymouth/natural-gentoo-remastered/natural-gentoo-remastered.plymouth /mnt/usr/share/plymouth/themes/natural-gentoo-remastered/
 	echo "This is not used because you are on branch Arch"
 }
 
