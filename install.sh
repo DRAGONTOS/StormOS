@@ -12,54 +12,40 @@ case $debugging in
 	;;
 esac
 
-
-
 sudo pacman -Sy vim --noconfirm
 
 configeditask() {
 clear
-echo ""
-echo "=============================================="
-echo "  Welcome to the Advanced StormOS Installer  "
-echo "=============================================="
-echo ""
-echo "[ONLY DO THIS IF YOU KNOW WHAT YOU ARE DOING!!]"
-echo ""
-read -p "Do you want to edit the configuration file? (y/n): " confedti
-
-case $confedti in
-	'y')
+if (whiptail --title "Welcome to the Advanced StormOS Installer" --yesno "[ONLY DO THIS IF YOU KNOW WHAT YOU ARE DOING!!]\n\n Do you want to edit the configuration file? (y/n)" 10 78); then
+    	echo "User selected Yes, exit status was $?."
 	vim /$root/stormos/install.sh
 	sleep 5
 	echo ''
 	echo 'Saved to install drive /mnt/home/$USER/Documents/InstallConfig'
 	echo ''
-	sed -i '14,16,38d' /$root/stormos/install.sh
+	sed -i '19,20,21,22,23,24,25,26,27,28,29,30,31d' /$root/stormos/install.sh
 	clear
 	sh /$root/stormos/install.sh
-	;;
-	*);;
-esac
+else
+    echo "User selected No, exit status was $?."
+fi
 }
 
 
 aliases() {
 # Disk setup
-echo ""
-lsblk
-echo ""
-# Comment this out and uncomment DRIVE if you want to set the configuration manually
-read -p "Please specify which drive it should be installed on [/dev/sda]: " DRIVE
+lsblk_output=$(lsblk)
 #DRIVE='/dev/sda'
+DRIVE=$(whiptail --inputbox "$lsblk_output\n\nPlease specify which drive it should be installed on [/dev/sda]" 20 78 --title "Disk Specify" 3>&1 1>&2 2>&3)
 
 # Hostname of the installed machine.
 # Comment this out and uncomment HOSTNAME if you want to set the configuration manually
-read -p "Please input your Hostname: " HOSTNAME
+HOSTNAME=$(whiptail --inputbox "Please input your Hostname" 8 78 --title "Hostname" 3>&1 1>&2 2>&3)
 #HOSTNAME='stormos'
 
 # Main user to create (by default, added to wheel group, and others).
 # Comment this out and uncomment USER if you want to set the configuration manually
-read -p "Please input a username for user: " USER
+USER=$(whiptail --inputbox "Please input a username for user" 8 78 --title "Username" 3>&1 1>&2 2>&3)
 #USER='namumi'
 
 manualmode="false"
@@ -69,41 +55,33 @@ if [ "$manualmode" == "false" ]; then
 # User Password
 while true; do
     # Display a custom prompt and then read the password (hidden with asterisks)
-    echo -n "Please enter your password for user $USER "
-    read -s password
-
+	password=$(whiptail --passwordbox "Please enter your password for user" 8 78 --title "User Password" 3>&1 1>&2 2>&3)
     # Confirm the password by asking the user to enter it again (hidden with asterisks)
-    echo -e "\nConfirm your password: "
-    read -s confirm_password
-
+	confirm_password=$(whiptail --passwordbox "Please enter your password for user" 8 78 --title "Confirm User Password" 3>&1 1>&2 2>&3)
     # Check if the passwords match
-    if [ "$password" == "$confirm_password" ]; then
-        echo -e "\nPasswords match!"
-	USERPASS="$password"
-        break  # Exit the loop if passwords match
-    else
-        echo -e "\nPasswords do not match. Please try again."
-    fi
+    	if [ "$password" == "$confirm_password" ]; then
+        	echo -e "\nPasswords match!"
+		USERPASS="$password"
+        	break  # Exit the loop if passwords match
+    	else
+        	echo -e "\nPasswords do not match. Please try again."
+    	fi
 done
 
 # Root Password
 while true; do
     # Display a custom prompt and then read the password (hidden with asterisks)
-    echo -n "Please enter your password for root "
-    read -s password
-
+	password=$(whiptail --passwordbox "Please enter your password for root" 8 78 --title "Root Password" 3>&1 1>&2 2>&3)
     # Confirm the password by asking the user to enter it again (hidden with asterisks)
-    echo -e "\nConfirm your password: "
-    read -s confirm_password
-
+	confirm_password=$(whiptail --passwordbox "Please enter your password for root" 8 78 --title "Confirm Root Password" 3>&1 1>&2 2>&3)
     # Check if the passwords match
-    if [ "$password" == "$confirm_password" ]; then
-        echo -e "\nPasswords match!"
-	ROOTPASS="$password"
-        break  # Exit the loop if passwords match
-    else
-        echo -e "\nPasswords do not match. Please try again."
-    fi
+    	if [ "$password" == "$confirm_password" ]; then
+        	echo -e "\nPasswords match!"
+		ROOTPASS="$password"
+        	break  # Exit the loop if passwords match
+    	else
+        	echo -e "\nPasswords do not match. Please try again."
+    	fi
 done
 
 else
@@ -113,40 +91,27 @@ fi
 
 # System timezone.
 # Comment this out and uncomment TIMEZONE if you want to set the configuration manually
-read -p "Please input your region [Europe/Amsterdam]: " TIMEZONE
+TIMEZONE=$(whiptail --inputbox "Please input your region [Europe/Amsterdam]" 8 78 --title "Timezone" 3>&1 1>&2 2>&3)
 #TIMEZONE='Europe/Amsterdam'
 
-echo
-echo ====================
-echo
-echo What Desktop do you want to use?
-echo
-echo 1, XFCE Desktop
-echo
-echo 2, XFCE-i3 Desktop
-echo
-echo 3, Dwm WindowManager
-echo
-echo 0, Server Install
-echo
-echo ====================
-echo
-
-read -p "Choose an Option.. [1/0] " DESKTOP
-
+DESKTOP=$(whiptail --title "Desktop Selection" --menu "What Desktop do you want to use?" 12 78 4 \
+"1" "XFCE Desktop" \
+"2" "XFCE-3 Desktop" \
+"3" "dwm wm" \
+"0" "Server Install" 3>&1 1>&2 2>&3)
 }
 
 setup_disk() {
 	if [ -d "/sys/firmware/efi/" ]; then
     		# Create a GPT partition table
-    		parted $DRIVE mklabel gpt
+    		parted --script $DRIVE mklabel gpt
 
     		# Create the "EFI System Partition" (ESP) - 1GB (adjust the size as needed)
-    		parted $DRIVE mkpart primary fat32 1MiB 1GB
-    		parted $DRIVE set 1 esp on
+    		parted --script $DRIVE mkpart primary fat32 1MiB 1GB
+    		parted --script $DRIVE set 1 esp on
 
     		# Create the "root" partition (ext4, using the rest of the disk)
-    		parted $DRIVE mkpart primary ext4 1GB 100%
+    		parted --script $DRIVE mkpart primary ext4 1GB 100%
 
     		# Format the ESP as FAT32
     		mkfs.fat -F32 ${DRIVE}1
@@ -162,17 +127,17 @@ setup_disk() {
 
     		# Mount the ESP to /mnt/boot
     		mount ${DRIVE}1 /mnt/boot/efi
-
+		pkill -f "whiptail"
 	else
 		# Create an MBR partition table
-    		parted $DRIVE mklabel msdos
+    		parted --script $DRIVE mklabel msdos
 
     		# Create the "boot" partition (FAT32)
-    		parted $DRIVE mkpart primary fat32 1MiB 1GB
-    		parted $DRIVE set 1 boot on
+    		parted --script $DRIVE mkpart primary fat32 1MiB 1GB
+    		parted --script $DRIVE set 1 boot on
 
     		# Create the "root" partition (ext4, using the rest of the disk)
-    		parted $DRIVE mkpart primary ext4 1GB 100%
+    		parted --script $DRIVE mkpart primary ext4 1GB 100%
 
     		# Format the "boot" partition as FAT32
     		mkfs.fat -F32 ${DRIVE}1
@@ -184,6 +149,7 @@ setup_disk() {
     		mount ${DRIVE}2 /mnt
     		mkdir /mnt/boot
     		mount ${DRIVE}1 /mnt/boot
+		pkill -f "whiptail"
 	fi
 
 
@@ -234,8 +200,6 @@ case $DESKTOP in
     '1')
 	# var for wanted packages
 		packagesdes1=("qt5ct" \
-		"qt5-translations" \
-		"oxygen-sounds" \
 		"blueprint-compiler" \
 		"appstream-glib" \
 		"dmidecode" \
@@ -268,10 +232,10 @@ case $DESKTOP in
 		"pulsemixer" \
 		"extra-cmake-modules" \
 		"qt5-quick3d")
-	
+
 	cp -f /$root/stormos/binaries/oxygen-sounds-5.27.8-1-any.pkg.tar.zst /mnt/
 	cp -f /$root/stormos/binaries/qt5-translations-5.15.10-1-any.pkg.tar.zst /mnt/
-	arch-chroot /mnt pacman -U oxygen-sounds-5.27.8-1-any.pkg.tar.zst --noconfirm 
+	arch-chroot /mnt pacman -U oxygen-sounds-5.27.8-1-any.pkg.tar.zst --noconfirm
 	arch-chroot /mnt pacman -U qt5-translations-5.15.10-1-any.pkg.tar.zst --noconfirm
 	arch-chroot /mnt pacman -Syu "${packagesdes1[@]}" --noconfirm
 	## services
@@ -652,7 +616,14 @@ finishing_up() {
 	rm /mnt/xfce4-i3-workspaces-plugin-git-1.4.2.r0.g427f165-1-x86_64.pkg.tar.zst
 	rm /mnt/mission-center-0.3.1-1-x86_64.pkg.tar.zst
 	cd
-	read -p "Do you want REBOOT or Check? [y/n] " reck
+
+	if (whiptail --title "Finnished Installing" --yesno "Do you want to Reboot or Check? [y/n]" 10 78); then
+    		mkdir -p /mnt/home/$USER/Documents/InstallConfig
+		cp /$root/stormos/install.sh /mnt/home/$USER/Documents/InstallConfig/
+	else
+		exit
+	fi
+
 	case $confedti in
 		'y')
 		mkdir -p /mnt/home/$USER/Documents/InstallConfig
@@ -660,19 +631,6 @@ finishing_up() {
 		;;
 		*)
 		;;
-	esac
-
-
-	case $reck in
-		'y')
-		umount -R /mnt
-	 	reboot
-		;;
-		'n')
-		bash
-		exit
-		;;
-		*);;
 	esac
 }
 
