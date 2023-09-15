@@ -9,7 +9,7 @@ To Create a CLI/TUI Arch Installer.
 ### How to setup through the ARCHISO
 First, set up an increased cowsize.
 ```
-systemd-cow-setup --set-size=4G
+mount -o remount,size=4G /run/archiso/cowspace
 ```
 Install Git and GLIBC to Fix Bug.
 ```
