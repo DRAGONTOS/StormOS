@@ -1,20 +1,25 @@
 # StormOS
-This is the Advanced installer, here by i aspect you know what you are doing.
+This is the Advanced Installer. Here, I expect you to know what you are doing.
+
+## Project Purpose
+To Create a CLI/TUI Arch Installer.
 
 ## Installation Instruction
 [THIS IN INTENDED TO BE RUN ON THE ARCHISO]
 ### How to setup through the ARCHISO
-First Setup increased cowsize.
+First, set up an increased cowsize.
 ```
 systemd-cow-setup --set-size=4G
 ```
-Install git and glibc to fix bug
+Install Git and GLIBC to Fix Bug.
 ```
 pacman -Sy glibc git
 ```
-now we setup the installer
+Now, we set up the installer.
 ```
 git clone https://github.com/dragontos/stormos
 cd stormos
 sh install.sh
 ```
+## Contributors
+- DRAGONTOS
