@@ -23,3 +23,4 @@ sh install.sh
 ```
 ## Contributors
 - DRAGONTOS
+- bfitzgit23
