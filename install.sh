@@ -2,8 +2,17 @@
 #
 # What root is the script cloned in eg /root/stormos and root is what you need to change for customizability
 root="root"
-sed -i '6d' /$root/stormos/install.sh
-#sh /$root/stormos/install.sh > install_log.txt 2>&1
+debugging="true"
+
+case $debugging in
+	'true')
+	exec > >(tee -a "/$root/stormos/install_log.txt") 2>&1
+	;;
+	*)
+	;;
+esac
+
+
 
 sudo pacman -Sy vim --noconfirm
 
@@ -204,7 +213,8 @@ setup_packages() {
 		"ttf-jetbrains-mono" \
 		"ttf-jetbrains-mono-nerd" \
 		"ttf-arimo-nerd" \
-		"ttf-tinos-nerd")
+		"ttf-tinos-nerd" \
+		"reflector")
 
 	# Actual pacstrap install
 	pacstrap -K /mnt "${pacpakpak[@]}"	# Chaotic-AUR Install
@@ -213,6 +223,7 @@ pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
 pacman-key --lsign-key 3056513887B78AEB
 pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst' --noconfirm
 EOF
+	arch-chroot /mnt reflector --verbose -l 20 --sort rate --save /etc/pacman.d/mirrorlist
 	arch-chroot /mnt sh chaoticaur.sh
 }
 
@@ -222,7 +233,9 @@ choose_desktop() {
 case $DESKTOP in
     '1')
 	# var for wanted packages
-	packagesdes1=("qt5ct" \
+		packagesdes1=("qt5ct" \
+		"qt5-translations" \
+		"oxygen-sounds" \
 		"blueprint-compiler" \
 		"appstream-glib" \
 		"dmidecode" \
@@ -252,13 +265,20 @@ case $DESKTOP in
 		"mpv" \
 		"mpc" \
 		"ncmpcpp" \
-		"pulsemixer")
-
+		"pulsemixer" \
+		"extra-cmake-modules" \
+		"qt5-quick3d")
+	
+	cp -f /$root/stormos/binaries/oxygen-sounds-5.27.8-1-any.pkg.tar.zst /mnt/
+	cp -f /$root/stormos/binaries/qt5-translations-5.15.10-1-any.pkg.tar.zst /mnt/
+	arch-chroot /mnt pacman -U oxygen-sounds-5.27.8-1-any.pkg.tar.zst --noconfirm 
+	arch-chroot /mnt pacman -U qt5-translations-5.15.10-1-any.pkg.tar.zst --noconfirm
 	arch-chroot /mnt pacman -Syu "${packagesdes1[@]}" --noconfirm
 	## services
 	arch-chroot /mnt systemctl enable lightdm
 
 	## Config files
+	mkdir -p /mnt/etc/lightdm
 	mv -f /$root/stormos/xfce/home/.config /mnt/home/$USER/
 	mv -f /$root/stormos/xfce/home/.local/* /mnt/home/$USER/.local/
 	mv -f /$root/stormos/xfce/home/Desktop /mnt/home/$USER/
@@ -274,6 +294,7 @@ case $DESKTOP in
 	cp -f /$root/stormos/xfce/etc/environment /mnt/etc/
 	cp -f /$root/stormos/xfce/etc/lightdm/* /mnt/etc/lightdm/
 	cp -f /$root/stormos/binaries/mission-center-0.3.1-1-x86_64.pkg.tar.zst /mnt/
+	cp -f /$root/stormos/binaries/kwin-effects-cube-2.0.0-2-x86_64.pkg.tar.zst /mnt/
 
 	arch-chroot /mnt chown -R $USER:$USER /home/$USER
 	arch-chroot /mnt chmod +x /usr/bin/playmovie
@@ -281,9 +302,10 @@ case $DESKTOP in
 	arch-chroot /mnt chmod +x /usr/bin/wgetm
 	arch-chroot /mnt chmod +x /usr/bin/menuxstorm
 
+	arch-chroot /mnt pacman -U kwin-effects-cube-2.0.0-2-x86_64.pkg.tar.zst --noconfirm
 	arch-chroot /mnt pacman -U mission-center-0.3.1-1-x86_64.pkg.tar.zst --noconfirm
 	;;
-    '2')
+	'2')
 	# var for wanted packages
 	packagesdes2=("qt5ct" \
 		"blueprint-compiler" \
