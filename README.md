@@ -1,4 +1,4 @@
-# StormOS
+#  The-Linux-Install-Script
 This is the Advanced Installer. Here, I expect you to know what you are doing.
 
 ## Project Purpose
