@@ -25,3 +25,11 @@ sh install.sh
 - DRAGONTOS
 - bfitzgit23
 - senalbulumulle
+
+## Goals
+- Create an installer using GTK4.
+- Ensure modularity in its design.
+- Maintain simplicity without unnecessary bloat.
+- Craft a manifesto.
+- Establish automation capabilities.
+- Create a start screen branch with hyperlinks and stuff.
