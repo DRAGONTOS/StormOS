@@ -3,8 +3,15 @@
 # What root is the script cloned in eg /root/stormos and root is what you need to change for customizability
 #===================
 	root="root"
+	#root="usr/share"
 	debugging="true"
 	mount -o remount,size=4G /run/archiso/cowspace
+
+	if [ "$EUID" -eq 0 ]; then
+    		echo "The script is running as root."
+	else
+		exit & exit & exit
+	fi
 
 	case $debugging in
 		'true')
@@ -15,9 +22,14 @@
 	esac
 
 		# Installs vim
-		pacman-key --init
-		pacman-key --init
-		pacman-key --init
+		rm /var/lib/pacman/sync/*
+		sleep 2
+		rm -r /etc/pacman.d/gnupg/*
+		sleep 2
+		pacman-key --init && sudo pacman-key --populate
+		sleep 2
+		pacman -Sy --noconfirm archlinux-keyring
+		sleep 2
 		pacman -Sy vim --noconfirm
 #===================
 
