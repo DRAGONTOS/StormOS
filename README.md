@@ -11,7 +11,7 @@ First, set up an increased cowsize.
 ```
 mount -o remount,size=4G /run/archiso/cowspace
 ```
-Install Git and GLIBC to Fix Bug.
+Install Git and GLIBC to Fix a Bug.
 ```
 pacman -Sy glibc git
 ```
