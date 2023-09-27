@@ -17,7 +17,7 @@ pacman -Sy glibc git
 ```
 Now, we set up the installer.
 ```
-git clone https://github.com/Trensa-Organization/The-Linux-Install-Script
+git clone -b stable https://github.com/Trensa-Organization/The-Linux-Install-Script
 cd the-linux-install-script
 sh install.sh
 ```
